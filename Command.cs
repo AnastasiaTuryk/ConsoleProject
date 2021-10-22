@@ -50,11 +50,9 @@ namespace ConsoleProject
                 seller_rep.GetList()[i].Write();
             }
         }
-        public void ChangeAct()
+        public void ChangeAct(int id)
         {
-            
-            Console.WriteLine("Type id:");
-            int id = Convert.ToInt32(Console.ReadLine());
+            string CommandText;
             for (int i = 0; i < repository.GetList().Count(); i++)
             {
                 if(repository.GetList()[i].Id==id)
@@ -63,53 +61,47 @@ namespace ConsoleProject
                     {
                         repository.GetList()[i].Active = true;
                         
-                        
-                       
-                        repository.Update("Auction",id,"true","active");
+                        int actint = Convert.ToInt32(true);
+                        CommandText = ($"UPDATE Auction SET active= { actint} WHERE id_auction={id}");
+                        repository.Update(CommandText);
                     }
                     else
                     {
                         repository.GetList()[i].Active = false;
-                        
-                        repository.Update("Auction", id, "false", "active");
+                        int actint = Convert.ToInt32(false);
+                        CommandText = ($"UPDATE Auction SET active= { actint} WHERE id_auction={id}");
+                        repository.Update(CommandText);
                     }
                 }
             }
         }
 
-        public void ChangeRating()
+        public void ChangeRating(string name,int rate)
         {
-            int id;string name;int rate; Console.WriteLine("input id:"); id = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("input name:"); name = Console.ReadLine();
-            Console.WriteLine("input new rate:"); rate = Convert.ToInt32(Console.ReadLine()); 
+            string CommandText;
             for (int i = 0; i < seller_rep.GetList().Count(); i++)
             {
                 if (seller_rep.GetList()[i].Name == name)
                 {
                     seller_rep.GetList()[i].Rating = rate;
-                    string r = Convert.ToString(rate);
            
-                   
-                    seller_rep.Update("Seller",id,r,"rating");
+                    CommandText = ($"UPDATE Seller SET rating= { rate} WHERE name={name}");
+                    seller_rep.Update(CommandText);
                     
                 }
             }
         }
-        public void ChangeName()
+        public void ChangeName(string name, int id)
         {
-          
-            Console.WriteLine("Type id:");
-            int id = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("type name:");
-            string name = Console.ReadLine();
+            string CommandText;
             for (int i = 0; i < goods_rep.GetList().Count(); i++)
             {
                 if (goods_rep.GetList()[i].Id == id)
                 {
                     goods_rep.GetList()[i].Name = name;
 
-                   
-                    goods_rep.Update("Goods",id,name,"name");
+                    CommandText = ($"UPDATE Goods SET name= { name} WHERE id={id}");
+                    goods_rep.Update(CommandText);
 
                 }
             }

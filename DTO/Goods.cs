@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleProject
+namespace DTO
 {
     public class Goods
     {
@@ -13,12 +13,17 @@ namespace ConsoleProject
         public string Name { get; set; }
         public string Material { get; set; }
 
-        public Goods(int Id,string name,string material ,int id_seller)
+        public DateTime RowUpdateTime { get; set; }
+        public DateTime RowInsertTime { get; set; }
+
+        public Goods(int Id, string name, string material, int id_seller, DateTime RowUpdateTime, DateTime RowInsertTime)
         {
             this.Id = Id;
             this.Name = name;
             this.Material = material;
             this.Id_seller = id_seller;
+            this.RowUpdateTime = RowUpdateTime;
+            this.RowInsertTime = RowInsertTime;
         }
         public void Write()
         {

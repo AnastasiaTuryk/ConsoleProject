@@ -69,8 +69,8 @@ namespace ConsoleProject
                         }
 					case 3:
 						{
-							//int id; Console.WriteLine("input id:"); id = Convert.ToInt32(Console.ReadLine());
-							cmd.ChangeAct();
+							int id; Console.WriteLine("input id:"); id = Convert.ToInt32(Console.ReadLine());
+							cmd.ChangeAct(id);
 							break;
 						}
 					case 4:

@@ -1,17 +1,20 @@
-﻿using System;
+﻿using DTO;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleProject.Repositories
+namespace DAL
 {
-    public class GoodRepository : IGoodRepository
+    public class GoodsRepository : IRepository<Goods>
     {
-        private string connStr = "Data Source=DESKTOP-K3G2FJG;Initial Catalog=AuctionManager;Integrated Security=True";
+        //private string connStr = "Data Source=DESKTOP-K3G2FJG;Initial Catalog=AuctionManager;Integrated Security=True";
+        protected string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["MyConnectionString"].ConnectionString;
         public List<Goods> goodsList;
-        public GoodRepository()
+        public GoodsRepository()
         {
             goodsList = new List<Goods>();
             ReadFromSql();
@@ -23,20 +26,21 @@ namespace ConsoleProject.Repositories
             {
 
 
-                com.CommandText = "select id,name,material,seller_id from Goods";
+                com.CommandText = "select id,name,material,seller_id,RowUpdateTime,RowInsertTime from Goods";
 
                 conn.Open();
                 SqlDataReader reader = com.ExecuteReader();
                 while (reader.Read())
                 {
 
-                    
+
                     int id = (int)reader["id"];
                     string name = (string)reader["name"];
                     string material = (string)reader["material"];
-            
                     int id_seller = (int)reader["seller_id"];
-                    Goods tmp = new Goods(id, name, material, id_seller);
+                    DateTime RowUpdateTime = (DateTime)reader["RowUpdateTime"];
+                    DateTime RowInsertTime = (DateTime)reader["RowInsertTime"];
+                    Goods tmp = new Goods(id, name, material, id_seller, RowUpdateTime, RowInsertTime);
                     goodsList.Add(tmp);
 
                 }
@@ -49,7 +53,7 @@ namespace ConsoleProject.Repositories
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
-                
+
                 string CommandText = ($"INSERT INTO Goods (name,material,seller_id) VALUES ('{list.Name}','{list.Material}',{list.Id_seller})");
                 SqlCommand command = new SqlCommand(CommandText, conn);
                 command.ExecuteNonQuery();
@@ -73,20 +77,35 @@ namespace ConsoleProject.Repositories
             }
             for (int i = 0; i < goodsList.Count(); i++)
             {
-                if(goodsList[i].Id==id)
+                if (goodsList[i].Id == id)
                 {
                     goodsList.RemoveAt(i);
                 }
             }
             //ReadFromSql();
         }
-        
+
 
         public List<Goods> GetList()
         {
             return goodsList;
         }
+        public void Update(string Table, int id, string newvalue, string Field)
+        {
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                conn.Open();
 
-       
+
+                string CommandText = $"UPDATE {Table} SET {Field} ='{newvalue}' WHERE id={id} ";
+
+                SqlCommand comm = new SqlCommand(CommandText, conn);
+                comm.ExecuteNonQuery();
+                conn.Close();
+            }
+            goodsList.Clear();
+            ReadFromSql();
+        }
     }
 }
+        

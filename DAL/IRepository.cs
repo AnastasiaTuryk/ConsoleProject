@@ -4,13 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleProject.Repositories
+namespace DAL
 {
-    public interface IGoodRepository
+    public interface IRepository<T>
     {
-        List<Goods> GetList();
+        List<T> GetList();
         void ReadFromSql();
-        void Add(Goods item);
+        void Add(T newItem);
+        void Update(string Table, int id, string newvalue, string Field);
         void Delete(int id);
+       
+
     }
 }

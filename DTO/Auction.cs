@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleProject
+namespace DTO
 {
     public class Auction
     {
@@ -16,15 +16,20 @@ namespace ConsoleProject
         public bool Active { get; set; }
         public int Id_goods { get; set; }
 
-        public Auction(int Id_auction, DateTime start_time,DateTime end_time,int start_price,int end_price,bool active,int id_goods)
+        public DateTime RowUpdateTime { get; set; }
+        public DateTime RowInsertTime { get; set; }
+
+        public Auction(int Id_auction, DateTime start_time, DateTime end_time, int start_price, int end_price, bool active, int id_goods, DateTime RowUpdateTime, DateTime RowInsertTime)
         {
-            this.Id=Id_auction;
+            this.Id = Id_auction;
             this.Start_time = start_time;
             this.End_time = end_time;
             this.start_price = start_price;
             this.end_price = end_price;
             this.Active = active;
             this.Id_goods = id_goods;
+            this.RowUpdateTime = RowUpdateTime;
+            this.RowInsertTime = RowInsertTime;
         }
         public void Write()
         {
