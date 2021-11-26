@@ -1,22 +1,22 @@
-﻿using DTO;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
 using System.Linq;
+using DTO;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
 
 namespace DAL
 {
-    public class SellerRepository : IRepository<Seller>
+    public class UserRepository:IRepository<User>
     {
-        //private string connStr = "Data Source=DESKTOP-K3G2FJG;Initial Catalog=AuctionManager;Integrated Security=True";
         protected string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["MyConnectionString"].ConnectionString;
-        public List<Seller> sellerList;
-        public SellerRepository()
+        public List<User> users;
+        
+
+        public UserRepository()
         {
-            sellerList = new List<Seller>();
+            users = new List<User>();
             ReadFromSql();
         }
         public void ReadFromSql()
@@ -26,7 +26,7 @@ namespace DAL
             {
 
 
-                com.CommandText = "select SellerId,name,rating,RowUpdateTime,RowInsertTime from Seller";
+                com.CommandText = "SELECT [user_id],[login],[email],[password],[RowInsertTime],[RowUpdateTime],[Salt] FROM [User]";
 
                 conn.Open();
                 SqlDataReader reader = com.ExecuteReader();
@@ -34,40 +34,45 @@ namespace DAL
                 {
 
 
-                    int id = (int)reader["SellerId"];
-                    string name = (string)reader["name"];
+                    int user_id = (int)reader["user_id"];
+                    string login = (string)reader["login"];
+                    string email = (string)reader["email"];
+                    byte[] password = (byte[])reader["password"];
                     DateTime RowUpdateTime = (DateTime)reader["RowUpdateTime"];
                     DateTime RowInsertTime = (DateTime)reader["RowInsertTime"];
+                    Guid salt = (Guid)reader["Salt"];
 
-                    int rating = (int)reader["rating"];
-                    Seller tmp = new Seller(id, name, rating, RowUpdateTime, RowInsertTime);
-                    sellerList.Add(tmp);
+                    User tmp = new User(user_id, login, email, password, RowUpdateTime, RowInsertTime,salt);
+                    users.Add(tmp);
 
                 }
 
             }
         }
-        public void Add(Seller list)
+        public void Add(User list)
         {
-            sellerList.Add(list);
+            users.Add(list);
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
-
-                string CommandText = ($"INSERT INTO Seller (name,rating) VALUES ('{list.Name}',,{list.Rating}");
+                string pass = BitConverter.ToString(list.Password).Replace("-", "").ToLower();
+                string pss = "0x" + pass;
+                string CommandText = ($"INSERT INTO [User]  ([login],[email],[password],[Salt]) VALUES('{list.Login}','{list.Email}',{pss},'{list.Salt}')");
                 SqlCommand command = new SqlCommand(CommandText, conn);
                 command.ExecuteNonQuery();
                 conn.Close();
             }
-            sellerList.Clear();
+            users.Clear();
             ReadFromSql();
         }
 
 
 
-        public List<Seller> GetList()
+        public List<User> GetList()
         {
-            return sellerList;
+            users.Clear();
+            ReadFromSql();
+            return users;
         }
 
         public void Update(string Table, int id, string newvalue, string Field)
@@ -77,13 +82,13 @@ namespace DAL
                 conn.Open();
 
                 int tmp = Convert.ToInt32(newvalue);
-                string CommandText = $"UPDATE {Table} SET {Field} ='{tmp}' WHERE SellerId={id} ";
+                string CommandText = $"UPDATE {Table} SET {Field} ='{tmp}' WHERE user_id={id} ";
 
                 SqlCommand comm = new SqlCommand(CommandText, conn);
                 comm.ExecuteNonQuery();
                 conn.Close();
             }
-            sellerList.Clear();
+            users.Clear();
             ReadFromSql();
         }
         public void Delete(int id)
@@ -92,17 +97,17 @@ namespace DAL
             {
                 conn.Open();
 
-                string CommandText = $"DELETE FROM Seller WHERE SellerId={id}";
+                string CommandText = $"DELETE FROM User WHERE user_id={id}";
 
                 SqlCommand command = new SqlCommand(CommandText, conn);
                 command.ExecuteNonQuery();
                 conn.Close();
             }
-            for (int i = 0; i < sellerList.Count(); i++)
+            for (int i = 0; i < users.Count(); i++)
             {
-                if (sellerList[i].Id == id)
+                if (users[i].Id == id)
                 {
-                    sellerList.RemoveAt(i);
+                    users.RemoveAt(i);
                 }
             }
 

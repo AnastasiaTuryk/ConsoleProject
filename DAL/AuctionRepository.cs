@@ -69,6 +69,8 @@ namespace DAL
 
         public List<Auction> GetList()
         {
+            auctionsList.Clear();
+            ReadFromSql();
             return auctionsList;
         }
         public void Update(string Table,int id,string newvalue,string Field)
@@ -76,10 +78,10 @@ namespace DAL
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
-                bool act = Convert.ToBoolean(newvalue);
-                int actint = Convert.ToInt32(act);
+                //bool act = Convert.ToBoolean(newvalue);
+                //int actint = Convert.ToInt32(act);
                 
-                string CommandText = $"UPDATE {Table} SET {Field} ='{actint}' WHERE id_auction={id} ";
+                string CommandText = $"UPDATE {Table} SET {Field} ='{newvalue}' WHERE id_auction={id} ";
                 
                 SqlCommand comm = new SqlCommand(CommandText, conn);
                 comm.ExecuteNonQuery();

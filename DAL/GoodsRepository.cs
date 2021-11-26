@@ -88,6 +88,8 @@ namespace DAL
 
         public List<Goods> GetList()
         {
+            goodsList.Clear();
+            ReadFromSql();
             return goodsList;
         }
         public void Update(string Table, int id, string newvalue, string Field)

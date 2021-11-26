@@ -62,16 +62,16 @@ namespace ConsoleProject
                     if(repository.GetList()[i].Active == false)
                     {
                         repository.GetList()[i].Active = true;
-                        
-                        
-                       
-                        repository.Update("Auction",id,"true","active");
+
+
+                        string val = Convert.ToString(Convert.ToInt32(true));
+                        repository.Update("Auction",id,val,"active");
                     }
                     else
                     {
                         repository.GetList()[i].Active = false;
-                        
-                        repository.Update("Auction", id, "false", "active");
+                        string val = Convert.ToString(Convert.ToInt32(false));
+                        repository.Update("Auction", id, val, "active");
                     }
                 }
             }
