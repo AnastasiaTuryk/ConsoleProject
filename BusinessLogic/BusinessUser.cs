@@ -43,5 +43,8 @@ namespace BusinessLogic
             var alg = SHA512.Create();
             return alg.ComputeHash(Encoding.UTF8.GetBytes(password + salt));
         }
+
+
+        
     }
 }

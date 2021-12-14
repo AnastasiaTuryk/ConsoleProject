@@ -23,7 +23,10 @@ namespace BusinessLogic
             }
             return searchedgoods;
         }
-
+        public List<Goods> GetAllGoods()
+        {
+            return repository.GetList();
+        }
         public List<Goods> SortGoods()
         {
             List<Goods> list=new List<Goods>();

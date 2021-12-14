@@ -1,0 +1,154 @@
+﻿<UserControl x:Class="WpfAuction.Views.ProductView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfAuction.Views" xmlns:viewmodels="clr-namespace:WpfAuction.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:GoodsViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFFFE5E5"/>
+                <GradientStop Color="#FFB34A4A" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Text="{Binding SelectedCategoryName}" Height="20"
+                     Background="#545d6a"></TextBox>
+            <Button HorizontalAlignment="Left" Grid.Column="1" Content="Find" Width="50" Height="20" Command="{Binding FindProductsCommand}" CommandParameter="{Binding SelectedCategoryName}" Style="{StaticResource RoundedButton}"></Button>
+        </Grid>
+        <DataGrid 
+            Grid.Row="1" x:Name="Imported" 
+            VerticalAlignment="Top"
+            ItemsSource="{Binding Products_Category}"
+            SelectedItem="{Binding SelectedItem}"      
+            AutoGenerateColumns="False" 
+            CanUserResizeColumns="True"
+            FontSize="10"
+            Background="#1b3a4b"
+            RowBackground="#065a60"
+            ColumnWidth="*"
+            HorizontalGridLinesBrush="Black"
+            VerticalGridLinesBrush="Black"
+            HorizontalScrollBarVisibility="Hidden"
+            VerticalScrollBarVisibility="Hidden"
+            RowHeaderWidth="0"
+            IsReadOnly="True">
+
+            <DataGrid.Resources>
+
+                <Style TargetType="ScrollBar">
+                    <Setter Property="Visibility" Value="Hidden" />
+                </Style>
+
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridCell.IsSelected" Value="True">
+                            <Setter Property="Background" Value="Blue" />
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="FontSize" Value="15"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Background" Value="Azure" />
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="BorderBrush" Value="Gray"/>
+                    <Setter Property="BorderThickness" Value="1 1 1 1"/>
+                    <Setter Property="Margin" Value="-1,-1,0,0" />
+                    <Setter Property="Height" Value="28" />
+                    <Setter Property="Width" Value="auto"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Path=Item1.Id}"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Path=Item1.Name}"/>
+                <DataGridTextColumn Header="Category" Binding="{Binding Path=Item2}"/>
+                <DataGridTextColumn Header="InsertTime" Binding="{Binding Path=Item1.RowInsertTime}"/>
+                <DataGridTextColumn Header="UpdateTime" Binding="{Binding Path=Item1.RowUpdateTime}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row ="0" >
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" DataContext="{Binding SelectedItem}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Foreground="AntiqueWhite" FontSize="25" Text="ID: "/>
+                        <TextBlock Foreground="AntiqueWhite" FontSize="25" Text="{Binding Path=Item1.Id, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Foreground="AntiqueWhite" FontSize="25" Text="Product name: "/>
+                        <TextBlock TextWrapping="WrapWithOverflow"  Foreground="AntiqueWhite" FontSize="25" Text="{Binding Path=Item1.Name, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Foreground="AntiqueWhite" FontSize="25" Text="Category: "/>
+                        <TextBlock Foreground="AntiqueWhite" FontSize="25" Text="{Binding Path=Item2}"/>
+                    </StackPanel>
+                </StackPanel>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Foreground="AntiqueWhite" FontSize="25" Text="Startup Price: "/>
+                            <TextBox Width="155" Background="#545d6a" Foreground="NavajoWhite" FontSize="25" Text="{Binding AuctionStartupPrice,
+                            ValidatesOnDataErrors=True,
+                            UpdateSourceTrigger=PropertyChanged}"
+                                 ToolTip="{Binding ErrorCollection[AuctionStartupPrice]}" Height="31"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Foreground="AntiqueWhite" FontSize="25" Text="Redemption Price: "/>
+                            <TextBox Width="100"  Background="#545d6a" Foreground="NavajoWhite" FontSize="25" Text="{Binding AuctionRedemptionPrice,
+                            ValidatesOnDataErrors=True,
+                            UpdateSourceTrigger=PropertyChanged}"
+                                 ToolTip="{Binding ErrorCollection[AuctionRedemptionPrice]}" Height="30"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Foreground="AntiqueWhite" FontSize="25" Text="EndTime: "/>
+                            <TextBox Width="199"  Background="#545d6a" Foreground="NavajoWhite" FontSize="25" Text="{Binding AuctionEndTime,
+                            ValidatesOnDataErrors=True,
+                            UpdateSourceTrigger=PropertyChanged}"
+                                 ToolTip="{Binding ErrorCollection[AuctionEndTime]}" Height="32"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <Button Grid.Column="1" 
+                            Height="50" 
+                            Content="Create auction" 
+                            Margin="0,50,0,0"
+                            Template="{DynamicResource ButtonControlTemplate1}"
+                            Foreground="Black"
+                            Command="{Binding CreateNewAuctionCommand}"
+                            IsEnabled="{Binding ButtonCreateIsEnable}"/>
+                </Grid>
+
+            </Grid>
+
+        </Grid>
+
+    </Grid>
+</UserControl>

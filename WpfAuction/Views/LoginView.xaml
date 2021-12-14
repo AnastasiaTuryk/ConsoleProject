@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="WpfAuction.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfAuction.Views" xmlns:viewmodels="clr-namespace:WpfAuction.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:LoginViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid Background="#FF5D729E">
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Label Content="Login" Foreground="White" Height="60" FontFamily="Showcard Gothic" FontWeight="Bold" FontStyle="Italic"/>
+            
+            <TextBox Text="{Binding LoginName,
+                ValidatesOnDataErrors=True,
+                UpdateSourceTrigger=PropertyChanged}"
+                     ToolTip="{Binding ErrorCollection[LoginName]}"
+                     Background="#545d6a"
+                     Foreground="White"
+                     FontSize="15"
+                     Width="70" 
+                     Height="20"
+                     IsEnabled="{Binding IsLoggedIn}"/>
+            <Label Content="Password" Foreground="White" Height="60" FontFamily="Showcard Gothic" FontWeight="Bold" FontStyle="Italic"/>
+            <TextBox Text="{Binding Password,
+                ValidatesOnDataErrors=True,
+                UpdateSourceTrigger=PropertyChanged}"
+                     ToolTip="{Binding ErrorCollection[Password]}"
+                     Background="#545d6a"
+                     Foreground="White"
+                     Width="70" 
+                     Height="20"
+                     FontSize="15"
+                     IsEnabled="{Binding IsLoggedIn}"/>
+        </StackPanel>
+        <Button Grid.Row="1" Width="60" Margin="179,0,41,0" Content="{Binding LoginViewButtonContent}"
+                Command="{Binding LoginButtonCommand}"
+                Template="{DynamicResource ButtonControlTemplate1}"
+                FontFamily="Arial Black"
+                IsEnabled="{Binding ButtonLogInIsEnable}"
+                >
+        </Button>
+    </Grid>
+</UserControl>
